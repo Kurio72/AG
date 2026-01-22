@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Audio Player</title>
+
+<style>
+body {
+  margin: 0;
+  background: transparent;
+  font-family: system-ui, sans-serif;
+}
+
+.player {
+  max-width: 480px;
+  margin: 10px auto;
+  padding: 12px;
+  background: #1e1e1e;
+  border-radius: 14px;
+  color: #fff;
+  box-shadow: 0 10px 25px rgba(0,0,0,.3);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+button {
+  background: #4caf50;
+  border: none;
+  color: white;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #43a047;
+}
+
+input[type=range] {
+  flex: 1;
+}
+</style>
+</head>
+
+<body>
+
+<div class="player">
+  <div class="controls">
+    <button id="play">▶</button>
+    <input type="range" id="seek" value="0">
+  </div>
+
+  <audio id="audio" preload="metadata">
+    <source src="https://TUO_HOST/audio/brano.mp3" type="audio/mpeg">
+  </audio>
+</div>
+
+<script>
+const audio = document.getElementById("audio");
+const play = document.getElementById("play");
+const seek = document.getElementById("seek");
+
+play.onclick = () => {
+  if (audio.paused) {
+    audio.play();
+    play.textContent = "⏸";
+  } else {
+    audio.pause();
+    play.textContent = "▶";
+  }
+};
+
+audio.onloadedmetadata = () => {
+  seek.max = audio.duration;
+};
+
+audio.ontimeupdate = () => {
+  seek.value = audio.currentTime;
+};
+
+seek.oninput = () => {
+  audio.currentTime = seek.value;
+};
+</script>
+
+</body>
+</html>
