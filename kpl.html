@@ -75,8 +75,8 @@ const seek = document.getElementById("seek");
 const title = document.getElementById("title");
 
 if (track) {
-  audio.src = "" + track;
-  title.textContent = track;
+  audio.src = "/" + track;
+  title.textContent = track.split("/").pop();
 } else {
   title.textContent = "Brano non specificato";
 }
