@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Audio Player</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: transparent;
+}
+
+.player {
+  max-width: 480px;
+  margin: 10px auto;
+  padding: 14px;
+  background: #1e1e1e;
+  border-radius: 14px;
+  color: white;
+  box-shadow: 0 10px 25px rgba(0,0,0,.3);
+}
+
+.title {
+  font-size: 14px;
+  opacity: 0.8;
+  margin-bottom: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+button {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: none;
+  background: #4caf50;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+input[type=range] {
+  flex: 1;
+}
+</style>
+</head>
+
+<body>
+
+<div class="player">
+  <div class="title" id="title">Nessun brano</div>
+  <div class="controls">
+    <button id="play">▶</button>
+    <input type="range" id="seek" value="0">
+  </div>
+  <audio id="audio"></audio>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const track = params.get("track");
+
+const audio = document.getElementById("audio");
+const play = document.getElementById("play");
+const seek = document.getElementById("seek");
+const title = document.getElementById("title");
+
+if (track) {
+  audio.src = "audio/" + track;
+  title.textContent = track;
+} else {
+  title.textContent = "Brano non specificato";
+}
+
+play.onclick = () => {
+  if (audio.paused) {
+    audio.play();
+    play.textContent = "⏸";
+  } else {
+    audio.pause();
+    play.textContent = "▶";
+  }
+};
+
+audio.onloadedmetadata = () => {
+  seek.max = audio.duration;
+};
+
+audio.ontimeupdate = () => {
+  seek.value = audio.currentTime;
+};
+
+seek.oninput = () => {
+  audio.currentTime = seek.value;
+};
+</script>
+
+</body>
+</html>
